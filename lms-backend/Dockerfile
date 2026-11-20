@@ -2,9 +2,8 @@
 FROM maven:3.8.6-eclipse-temurin-8 AS build
 WORKDIR /app
 COPY pom.xml .
-RUN mvn -B dependency:go-offline
 COPY src ./src
-RUN mvn -B clean package -DskipTests
+RUN mvn -B clean package -DskipTests -Dmaven.wagon.http.retryHandler.count=5 -Dmaven.wagon.rto=120000
 
 # ---------- ?tape 2 : image d'ex?cution ----------
 FROM eclipse-temurin:8-jre-alpine
